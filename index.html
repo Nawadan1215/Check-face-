@@ -13,9 +13,10 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-color: #ffffff;
             min-height: 100vh;
-            color: white;
+            color: #333;
+            line-height: 1.6;
         }
 
         .container {
@@ -26,123 +27,146 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            padding: 30px 0;
         }
 
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #2c3e50;
+            font-weight: 300;
         }
 
         .header p {
             font-size: 1.1rem;
-            opacity: 0.9;
+            color: #7f8c8d;
         }
 
-        .camera-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 30px;
+        .upload-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 40px;
             margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 2px dashed #dee2e6;
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto 20px;
+        .upload-section:hover {
+            border-color: #6c757d;
+            background: #f1f3f4;
         }
 
-        #video, #capturedImage {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .upload-section.dragover {
+            border-color: #007bff;
+            background: #e3f2fd;
         }
 
-        #capturedImage {
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #6c757d;
+        }
+
+        .upload-text {
+            font-size: 1.2rem;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+
+        .upload-subtext {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        #fileInput {
             display: none;
         }
 
-        .controls {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        button {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        .upload-btn {
+            background: #007bff;
             border: none;
             color: white;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 0 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: inline-block;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        .upload-btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
         }
 
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .image-preview {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .preview-img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .analyze-btn {
+            background: #28a745;
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            display: none;
+        }
+
+        .analyze-btn:hover {
+            background: #1e7e34;
+            transform: translateY(-1px);
+        }
+
+        .reset-btn {
+            background: #6c757d;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background: #545b62;
         }
 
         .results-section {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
+            background: #ffffff;
+            border-radius: 12px;
             padding: 30px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             display: none;
-        }
-
-        .result-card {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid #ff6b6b;
-        }
-
-        .result-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffd700;
-        }
-
-        .result-description {
-            font-size: 1rem;
-            line-height: 1.6;
-            opacity: 0.9;
-        }
-
-        .score {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #ffd700;
-            text-align: center;
-            margin: 20px 0;
         }
 
         .loading {
             text-align: center;
             padding: 40px;
-            font-size: 1.2rem;
         }
 
         .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid white;
+            border-top: 3px solid #007bff;
             width: 40px;
             height: 40px;
             animation: spin 1s linear infinite;
@@ -154,13 +178,58 @@
             100% { transform: rotate(360deg); }
         }
 
-        .error {
-            background: rgba(255,0,0,0.2);
-            border: 1px solid rgba(255,0,0,0.5);
+        .loading-text {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+
+        .result-card {
+            background: #f8f9fa;
             border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+        }
+
+        .result-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .result-description {
+            font-size: 1rem;
+            color: #495057;
+        }
+
+        .score {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #007bff;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .results-title {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            color: #2c3e50;
+            font-weight: 300;
+        }
+
+        .error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
             padding: 15px;
             margin: 20px 0;
             text-align: center;
+            color: #721c24;
         }
 
         @media (max-width: 768px) {
@@ -172,8 +241,12 @@
                 font-size: 2rem;
             }
             
-            button {
-                padding: 12px 24px;
+            .upload-section {
+                padding: 30px 20px;
+            }
+            
+            .upload-btn, .analyze-btn {
+                padding: 12px 25px;
                 font-size: 1rem;
             }
         }
@@ -182,32 +255,37 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 AI顔診断</h1>
-            <p>写真を撮って、あなたの顔タイプを分析してみましょう！</p>
+            <h1>AI顔診断</h1>
+            <p>写真をアップロードして、あなたの顔タイプを分析してみましょう</p>
         </div>
 
-        <div class="camera-section">
-            <div class="video-container">
-                <video id="video" autoplay playsinline></video>
-                <img id="capturedImage" alt="撮影した写真">
-            </div>
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-icon">📸</div>
+            <div class="upload-text">写真をアップロード</div>
+            <div class="upload-subtext">JPEGまたはPNG形式の画像をドラッグ&ドロップ、またはクリックして選択</div>
             
-            <div class="controls">
-                <button id="startCamera">📷 カメラを起動</button>
-                <button id="capturePhoto" disabled>📸 写真を撮る</button>
-                <button id="analyzePhoto" disabled>🔍 顔を分析</button>
-                <button id="retakePhoto" style="display:none;">🔄 撮り直し</button>
+            <input type="file" id="fileInput" accept="image/*">
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                ファイルを選択
+            </button>
+            
+            <div class="image-preview" id="imagePreview">
+                <img id="previewImg" class="preview-img" alt="プレビュー">
+                <div>
+                    <button class="analyze-btn" id="analyzeBtn">顔を分析する</button>
+                    <button class="reset-btn" id="resetBtn">別の写真を選ぶ</button>
+                </div>
             </div>
         </div>
 
         <div id="resultsSection" class="results-section">
             <div id="loadingDiv" class="loading">
                 <div class="spinner"></div>
-                <p>AIが顔を分析中...</p>
+                <div class="loading-text">AIが顔を分析中...</div>
             </div>
             
             <div id="resultsDiv" style="display:none;">
-                <h2 style="text-align:center; margin-bottom:20px; font-size:1.8rem;">📊 分析結果</h2>
+                <h2 class="results-title">分析結果</h2>
                 <div id="resultsContent"></div>
             </div>
         </div>
@@ -216,89 +294,109 @@
     <script>
         class FaceAnalyzer {
             constructor() {
-                this.video = document.getElementById('video');
-                this.capturedImage = document.getElementById('capturedImage');
-                this.canvas = document.createElement('canvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.stream = null;
+                this.fileInput = document.getElementById('fileInput');
+                this.uploadSection = document.getElementById('uploadSection');
+                this.imagePreview = document.getElementById('imagePreview');
+                this.previewImg = document.getElementById('previewImg');
+                this.analyzeBtn = document.getElementById('analyzeBtn');
+                this.resetBtn = document.getElementById('resetBtn');
+                this.resultsSection = document.getElementById('resultsSection');
                 
-                this.initializeButtons();
+                this.initializeEvents();
             }
 
-            initializeButtons() {
-                document.getElementById('startCamera').addEventListener('click', () => this.startCamera());
-                document.getElementById('capturePhoto').addEventListener('click', () => this.capturePhoto());
-                document.getElementById('analyzePhoto').addEventListener('click', () => this.analyzePhoto());
-                document.getElementById('retakePhoto').addEventListener('click', () => this.retakePhoto());
+            initializeEvents() {
+                // ファイル選択
+                this.fileInput.addEventListener('change', (e) => this.handleFileSelect(e));
+                
+                // ドラッグ&ドロップ
+                this.uploadSection.addEventListener('dragover', (e) => this.handleDragOver(e));
+                this.uploadSection.addEventListener('dragleave', (e) => this.handleDragLeave(e));
+                this.uploadSection.addEventListener('drop', (e) => this.handleDrop(e));
+                
+                // ボタンイベント
+                this.analyzeBtn.addEventListener('click', () => this.analyzePhoto());
+                this.resetBtn.addEventListener('click', () => this.resetUpload());
             }
 
-            async startCamera() {
-                try {
-                    this.stream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { 
-                            width: { ideal: 640 },
-                            height: { ideal: 480 },
-                            facingMode: 'user'
-                        } 
-                    });
-                    this.video.srcObject = this.stream;
+            handleDragOver(e) {
+                e.preventDefault();
+                this.uploadSection.classList.add('dragover');
+            }
+
+            handleDragLeave(e) {
+                e.preventDefault();
+                this.uploadSection.classList.remove('dragover');
+            }
+
+            handleDrop(e) {
+                e.preventDefault();
+                this.uploadSection.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    this.processFile(files[0]);
+                }
+            }
+
+            handleFileSelect(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    this.processFile(file);
+                }
+            }
+
+            processFile(file) {
+                // ファイルタイプチェック
+                if (!file.type.startsWith('image/')) {
+                    this.showError('画像ファイルを選択してください。');
+                    return;
+                }
+
+                // ファイルサイズチェック（5MB制限）
+                if (file.size > 5 * 1024 * 1024) {
+                    this.showError('ファイルサイズが大きすぎます。5MB以下の画像を選択してください。');
+                    return;
+                }
+
+                // プレビュー表示
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.previewImg.src = e.target.result;
+                    this.imagePreview.style.display = 'block';
+                    this.analyzeBtn.style.display = 'inline-block';
                     
-                    document.getElementById('startCamera').disabled = true;
-                    document.getElementById('capturePhoto').disabled = false;
-                } catch (error) {
-                    this.showError('カメラにアクセスできませんでした。ブラウザの設定を確認してください。');
-                }
-            }
-
-            capturePhoto() {
-                this.canvas.width = this.video.videoWidth;
-                this.canvas.height = this.video.videoHeight;
-                this.ctx.drawImage(this.video, 0, 0);
-                
-                const imageDataUrl = this.canvas.toDataURL('image/jpeg', 0.8);
-                this.capturedImage.src = imageDataUrl;
-                this.capturedImage.style.display = 'block';
-                this.video.style.display = 'none';
-                
-                document.getElementById('capturePhoto').disabled = true;
-                document.getElementById('analyzePhoto').disabled = false;
-                document.getElementById('retakePhoto').style.display = 'inline-block';
-                
-                // カメラを停止
-                if (this.stream) {
-                    this.stream.getTracks().forEach(track => track.stop());
-                }
-            }
-
-            retakePhoto() {
-                this.capturedImage.style.display = 'none';
-                this.video.style.display = 'block';
-                document.getElementById('retakePhoto').style.display = 'none';
-                document.getElementById('analyzePhoto').disabled = true;
-                document.getElementById('resultsSection').style.display = 'none';
-                
-                this.startCamera();
+                    // アップロードセクションを小さく
+                    this.uploadSection.style.padding = '20px';
+                    document.querySelector('.upload-icon').style.display = 'none';
+                    document.querySelector('.upload-text').style.display = 'none';
+                    document.querySelector('.upload-subtext').style.display = 'none';
+                    document.querySelector('.upload-btn').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
             }
 
             async analyzePhoto() {
-                document.getElementById('resultsSection').style.display = 'block';
+                this.resultsSection.style.display = 'block';
                 document.getElementById('loadingDiv').style.display = 'block';
                 document.getElementById('resultsDiv').style.display = 'none';
                 
-                // 実際の分析をシミュレート
+                // スクロール
+                this.resultsSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // 分析実行
                 await this.performFaceAnalysis();
             }
 
             async performFaceAnalysis() {
-                // シミュレートされた分析（実際のAI分析の代わり）
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // シミュレートされた分析
+                await new Promise(resolve => setTimeout(resolve, 2500));
                 
                 const analysisResults = this.generateAnalysisResults();
                 this.displayResults(analysisResults);
             }
 
             generateAnalysisResults() {
-                // ランダムな分析結果を生成（実際の実装では画像分析結果を使用）
                 const faceShapes = ['丸顔', '面長', 'ベース型', '逆三角形', 'ダイヤモンド型'];
                 const eyeTypes = ['大きな目', '切れ長の目', 'たれ目', 'つり目', 'アーモンド型の目'];
                 const personalityTraits = [
@@ -308,7 +406,7 @@
                     '知的で分析力がある',
                     '社交的で人を惹きつける魅力がある'
                 ];
-                const beautyScore = Math.floor(Math.random() * 20) + 80; // 80-100点
+                const beautyScore = Math.floor(Math.random() * 20) + 80;
                 
                 return {
                     faceShape: faceShapes[Math.floor(Math.random() * faceShapes.length)],
@@ -335,40 +433,59 @@
                 
                 const resultsContent = document.getElementById('resultsContent');
                 resultsContent.innerHTML = `
-                    <div class="score">美人度: ${results.beautyScore}点</div>
+                    <div class="score">美しさスコア: ${results.beautyScore}点</div>
                     
                     <div class="result-card">
-                        <div class="result-title">👤 顔の形</div>
+                        <div class="result-title">顔の形</div>
                         <div class="result-description">あなたの顔は「${results.faceShape}」タイプです。バランスの取れた美しい輪郭をしています。</div>
                     </div>
                     
                     <div class="result-card">
-                        <div class="result-title">👁️ 目の特徴</div>
+                        <div class="result-title">目の特徴</div>
                         <div class="result-description">${results.eyeType}が印象的です。とても魅力的な目元をされています。</div>
                     </div>
                     
                     <div class="result-card">
-                        <div class="result-title">🌟 性格診断</div>
+                        <div class="result-title">性格診断</div>
                         <div class="result-description">顔の特徴から分析すると、あなたは${results.personality}性格の持ち主のようです。</div>
                     </div>
                     
                     <div class="result-card">
-                        <div class="result-title">💄 おすすめメイク</div>
-                        <div class="result-description">${results.recommendations.makeup}がよく似合いそうです。</div>
+                        <div class="result-title">おすすめメイク</div>
+                        <div class="result-description">${results.recommendations.makeup}がよく似合いそうです。あなたの魅力を引き出してくれるでしょう。</div>
                     </div>
                     
                     <div class="result-card">
-                        <div class="result-title">💇‍♀️ おすすめヘアスタイル</div>
-                        <div class="result-description">${results.recommendations.hairstyle}にチャレンジしてみてはいかがでしょうか。</div>
+                        <div class="result-title">おすすめヘアスタイル</div>
+                        <div class="result-description">${results.recommendations.hairstyle}にチャレンジしてみてはいかがでしょうか。顔の形にとても似合うスタイルです。</div>
                     </div>
                 `;
             }
 
+            resetUpload() {
+                this.fileInput.value = '';
+                this.imagePreview.style.display = 'none';
+                this.analyzeBtn.style.display = 'none';
+                this.resultsSection.style.display = 'none';
+                
+                // アップロードセクションを元に戻す
+                this.uploadSection.style.padding = '40px';
+                document.querySelector('.upload-icon').style.display = 'block';
+                document.querySelector('.upload-text').style.display = 'block';
+                document.querySelector('.upload-subtext').style.display = 'block';
+                document.querySelector('.upload-btn').style.display = 'inline-block';
+            }
+
             showError(message) {
+                const existingError = document.querySelector('.error');
+                if (existingError) {
+                    existingError.remove();
+                }
+                
                 const errorDiv = document.createElement('div');
                 errorDiv.className = 'error';
                 errorDiv.textContent = message;
-                document.querySelector('.camera-section').appendChild(errorDiv);
+                this.uploadSection.appendChild(errorDiv);
                 
                 setTimeout(() => {
                     if (errorDiv.parentNode) {
