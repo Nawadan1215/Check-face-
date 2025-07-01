@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI顔診断 - あなたの顔タイプを分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .camera-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+        }
+
+        #video, #capturedImage {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        #capturedImage {
+            display: none;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: none;
+        }
+
+        .result-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .result-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        .result-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffd700;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(255,0,0,0.2);
+            border: 1px solid rgba(255,0,0,0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            button {
+                padding: 12px 24px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 AI顔診断</h1>
+            <p>写真を撮って、あなたの顔タイプを分析してみましょう！</p>
+        </div>
+
+        <div class="camera-section">
+            <div class="video-container">
+                <video id="video" autoplay playsinline></video>
+                <img id="capturedImage" alt="撮影した写真">
+            </div>
+            
+            <div class="controls">
+                <button id="startCamera">📷 カメラを起動</button>
+                <button id="capturePhoto" disabled>📸 写真を撮る</button>
+                <button id="analyzePhoto" disabled>🔍 顔を分析</button>
+                <button id="retakePhoto" style="display:none;">🔄 撮り直し</button>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results-section">
+            <div id="loadingDiv" class="loading">
+                <div class="spinner"></div>
+                <p>AIが顔を分析中...</p>
+            </div>
+            
+            <div id="resultsDiv" style="display:none;">
+                <h2 style="text-align:center; margin-bottom:20px; font-size:1.8rem;">📊 分析結果</h2>
+                <div id="resultsContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class FaceAnalyzer {
+            constructor() {
+                this.video = document.getElementById('video');
+                this.capturedImage = document.getElementById('capturedImage');
+                this.canvas = document.createElement('canvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.stream = null;
+                
+                this.initializeButtons();
+            }
+
+            initializeButtons() {
+                document.getElementById('startCamera').addEventListener('click', () => this.startCamera());
+                document.getElementById('capturePhoto').addEventListener('click', () => this.capturePhoto());
+                document.getElementById('analyzePhoto').addEventListener('click', () => this.analyzePhoto());
+                document.getElementById('retakePhoto').addEventListener('click', () => this.retakePhoto());
+            }
+
+            async startCamera() {
+                try {
+                    this.stream = await navigator.mediaDevices.getUserMedia({ 
+                        video: { 
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        } 
+                    });
+                    this.video.srcObject = this.stream;
+                    
+                    document.getElementById('startCamera').disabled = true;
+                    document.getElementById('capturePhoto').disabled = false;
+                } catch (error) {
+                    this.showError('カメラにアクセスできませんでした。ブラウザの設定を確認してください。');
+                }
+            }
+
+            capturePhoto() {
+                this.canvas.width = this.video.videoWidth;
+                this.canvas.height = this.video.videoHeight;
+                this.ctx.drawImage(this.video, 0, 0);
+                
+                const imageDataUrl = this.canvas.toDataURL('image/jpeg', 0.8);
+                this.capturedImage.src = imageDataUrl;
+                this.capturedImage.style.display = 'block';
+                this.video.style.display = 'none';
+                
+                document.getElementById('capturePhoto').disabled = true;
+                document.getElementById('analyzePhoto').disabled = false;
+                document.getElementById('retakePhoto').style.display = 'inline-block';
+                
+                // カメラを停止
+                if (this.stream) {
+                    this.stream.getTracks().forEach(track => track.stop());
+                }
+            }
+
+            retakePhoto() {
+                this.capturedImage.style.display = 'none';
+                this.video.style.display = 'block';
+                document.getElementById('retakePhoto').style.display = 'none';
+                document.getElementById('analyzePhoto').disabled = true;
+                document.getElementById('resultsSection').style.display = 'none';
+                
+                this.startCamera();
+            }
+
+            async analyzePhoto() {
+                document.getElementById('resultsSection').style.display = 'block';
+                document.getElementById('loadingDiv').style.display = 'block';
+                document.getElementById('resultsDiv').style.display = 'none';
+                
+                // 実際の分析をシミュレート
+                await this.performFaceAnalysis();
+            }
+
+            async performFaceAnalysis() {
+                // シミュレートされた分析（実際のAI分析の代わり）
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                const analysisResults = this.generateAnalysisResults();
+                this.displayResults(analysisResults);
+            }
+
+            generateAnalysisResults() {
+                // ランダムな分析結果を生成（実際の実装では画像分析結果を使用）
+                const faceShapes = ['丸顔', '面長', 'ベース型', '逆三角形', 'ダイヤモンド型'];
+                const eyeTypes = ['大きな目', '切れ長の目', 'たれ目', 'つり目', 'アーモンド型の目'];
+                const personalityTraits = [
+                    '優しくて思いやりがある',
+                    'クリエイティブで芸術的センスがある',
+                    'リーダーシップがあり決断力がある',
+                    '知的で分析力がある',
+                    '社交的で人を惹きつける魅力がある'
+                ];
+                const beautyScore = Math.floor(Math.random() * 20) + 80; // 80-100点
+                
+                return {
+                    faceShape: faceShapes[Math.floor(Math.random() * faceShapes.length)],
+                    eyeType: eyeTypes[Math.floor(Math.random() * eyeTypes.length)],
+                    personality: personalityTraits[Math.floor(Math.random() * personalityTraits.length)],
+                    beautyScore: beautyScore,
+                    recommendations: this.getRecommendations()
+                };
+            }
+
+            getRecommendations() {
+                const makeup = ['ナチュラルメイク', 'アイラインを強調', 'リップを際立たせる', 'チークで血色感アップ'];
+                const hairstyle = ['ボブカット', 'ロングウェーブ', 'ショートカット', 'ミディアムレイヤー'];
+                
+                return {
+                    makeup: makeup[Math.floor(Math.random() * makeup.length)],
+                    hairstyle: hairstyle[Math.floor(Math.random() * hairstyle.length)]
+                };
+            }
+
+            displayResults(results) {
+                document.getElementById('loadingDiv').style.display = 'none';
+                document.getElementById('resultsDiv').style.display = 'block';
+                
+                const resultsContent = document.getElementById('resultsContent');
+                resultsContent.innerHTML = `
+                    <div class="score">美人度: ${results.beautyScore}点</div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">👤 顔の形</div>
+                        <div class="result-description">あなたの顔は「${results.faceShape}」タイプです。バランスの取れた美しい輪郭をしています。</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">👁️ 目の特徴</div>
+                        <div class="result-description">${results.eyeType}が印象的です。とても魅力的な目元をされています。</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">🌟 性格診断</div>
+                        <div class="result-description">顔の特徴から分析すると、あなたは${results.personality}性格の持ち主のようです。</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">💄 おすすめメイク</div>
+                        <div class="result-description">${results.recommendations.makeup}がよく似合いそうです。</div>
+                    </div>
+                    
+                    <div class="result-card">
+                        <div class="result-title">💇‍♀️ おすすめヘアスタイル</div>
+                        <div class="result-description">${results.recommendations.hairstyle}にチャレンジしてみてはいかがでしょうか。</div>
+                    </div>
+                `;
+            }
+
+            showError(message) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error';
+                errorDiv.textContent = message;
+                document.querySelector('.camera-section').appendChild(errorDiv);
+                
+                setTimeout(() => {
+                    if (errorDiv.parentNode) {
+                        errorDiv.parentNode.removeChild(errorDiv);
+                    }
+                }, 5000);
+            }
+        }
+
+        // アプリケーション初期化
+        document.addEventListener('DOMContentLoaded', () => {
+            new FaceAnalyzer();
+        });
+    </script>
+</body>
+</html>
